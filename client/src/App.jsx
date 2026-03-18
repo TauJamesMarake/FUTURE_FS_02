@@ -38,11 +38,11 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={Login} element={
+<Route path="/login" element={
             <PublicRoute><Login /></PublicRoute>
           } />
 
-          <Route path="/" element={
+<Route path="/dashboard" element={
             <ProtectedLayout title="Dashboard" subtitle="Overview of your lead pipeline">
               <Dashboard />
             </ProtectedLayout>
@@ -61,7 +61,7 @@ export default function App() {
           } />
 
           {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
