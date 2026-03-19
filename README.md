@@ -9,9 +9,9 @@
 **Capture, track, and convert leads effortlessly.** Production-ready full-stack CRM with dashboard analytics, notes, and public API. Deploy in minutes!
 
 ## ✨ Features at a Glance
-<div align=\"center\">
-  <img src=\"https://via.placeholder.com/800x400/0a2540/ffffff?text=Dashboard+Analytics\" alt=\"Dashboard Screenshot\" width=\"48%\">
-  <img src=\"https://via.placeholder.com/800x400/0a2540/ffffff?text=Leads+Table\" alt=\"Leads Table Screenshot\" width=\"48%\">
+<div align="center">
+  <img src="https://via.placeholder.com/800x400/1f2937/f8fafc?text=%F0%9F%9A%80+Client+Lead+CRM+Dashboard+-+Real-time+Analytics+%26+Stats" alt="CRM Dashboard Screenshot" width="48%">
+  <img src="https://via.placeholder.com/800x400/1f2937/f8fafc?text=%F0%9F%93%8A+Smart+Leads+Table+-+Filter%2C+Search%2C+Notes" alt="CRM Leads Table Screenshot" width="48%">
 </div>
 
 - 🔐 **Secure JWT Auth** - Admin dashboard login
@@ -20,7 +20,7 @@
 - 🔍 **Smart Search/Filter** - Name, email, company, status, source
 - 📝 **Follow-up Notes** - Timestamped per-lead notes
 - 🌐 **Public API** - Capture leads from your website/forms
-- 📱 **Responsive UI** - Mobile-first SaaS design
+- 📱 **Responsive Design** - Works on mobile, tablet, desktop
 - ⚡ **Fast & Scalable** - Vite + Express + Supabase Postgres
 
 ## 🛠 Tech Stack Badges
