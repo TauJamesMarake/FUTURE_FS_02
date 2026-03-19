@@ -9,10 +9,10 @@
 **Capture, track, and convert leads effortlessly.** Production-ready full-stack CRM with dashboard analytics, notes, and public API. Deploy in minutes!
 
 ## ✨ Features at a Glance
-<div align="center">
+<!-- <div align="center">
   <img src="https://via.placeholder.com/800x400/1f2937/f8fafc?text=%F0%9F%9A%80+Client+Lead+CRM+Dashboard+-+Real-time+Analytics+%26+Stats" alt="CRM Dashboard Screenshot" width="48%">
   <img src="https://via.placeholder.com/800x400/1f2937/f8fafc?text=%F0%9F%93%8A+Smart+Leads+Table+-+Filter%2C+Search%2C+Notes" alt="CRM Leads Table Screenshot" width="48%">
-</div>
+</div> -->
 
 - 🔐 **Secure JWT Auth** - Admin dashboard login
 - 📊 **Real-time Analytics** - Charts for leads by status/source
