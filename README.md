@@ -32,7 +32,7 @@ A production-ready full-stack CRM application for capturing, tracking, and manag
 
 ```
 crm/
-├── server/
+├── backend/
 │   ├── config/
 │   │   └── supabase.js          # Supabase client setup
 │   ├── controllers/
@@ -51,7 +51,7 @@ crm/
 │   ├── package.json
 │   └── server.js
 │
-├── client/
+├── /frontend
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Sidebar.jsx
@@ -106,7 +106,7 @@ cd server
 cp .env.example .env
 ```
 
-Edit `server/.env`:
+Edit `backend/.env`:
 ```env
 PORT=5000
 SUPABASE_URL=https://your-project.supabase.co
@@ -191,7 +191,7 @@ curl -X POST http://localhost:5000/api/leads \
 
 ## 🔐 Default Admin Credentials
 
-Set via environment variables in `server/.env`:
+Set via environment variables in `backend/.env`:
 - **Email**: value of `ADMIN_EMAIL`
 - **Password**: value of `ADMIN_PASSWORD`
 
@@ -215,7 +215,7 @@ The dashboard shows:
 
 ### Backend (Railway / Render)
 - Set all environment variables in the platform dashboard
-- Point to `server/server.js` as the entry point
+- Point to `backend/server.js` as the entry point
 
 ### Frontend (Vercel / Netlify)
 - Set `VITE_API_URL` to your deployed backend URL

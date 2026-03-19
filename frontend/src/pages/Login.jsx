@@ -77,9 +77,9 @@ export default function Login() {
           </button>
         </form>
 
-        <p style={{ marginTop: 20, fontSize: 12, color: 'var(--text-muted)', textAlign: 'center' }}>
+        {/* <p style={{ marginTop: 20, fontSize: 12, color: 'var(--text-muted)', textAlign: 'center' }}>
           Use the credentials set in your server <code style={{ color: 'var(--accent)' }}>.env</code> file.
-        </p>
+        </p> */}
       </div>
     </div>
   );

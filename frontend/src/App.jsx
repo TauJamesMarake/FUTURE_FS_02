@@ -38,11 +38,11 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-<Route path="/login" element={
+          <Route path="/login" element={
             <PublicRoute><Login /></PublicRoute>
           } />
 
-<Route path="/dashboard" element={
+          <Route path="/dashboard" element={
             <ProtectedLayout title="Dashboard" subtitle="Overview of your lead pipeline">
               <Dashboard />
             </ProtectedLayout>
