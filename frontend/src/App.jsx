@@ -13,7 +13,7 @@ const ProtectedLayout = ({ children, title, subtitle }) => {
   const { admin, loading } = useAuth();
 
   if (loading) return <div className="loading-spinner">Loading…</div>;
-  if (!admin) return <Navigate to={Login} replace />;
+  if (!admin) return <Navigate to='/login' replace />;
 
   return (
     <div className="app-layout">
@@ -30,7 +30,7 @@ const ProtectedLayout = ({ children, title, subtitle }) => {
 const PublicRoute = ({ children }) => {
   const { admin, loading } = useAuth();
   if (loading) return null;
-  return admin ? <Navigate to="/" replace /> : children;
+  return admin ? <Navigate to="/dashboard" replace /> : children;
 };
 
 export default function App() {
