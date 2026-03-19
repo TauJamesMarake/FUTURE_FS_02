@@ -1,229 +1,136 @@
-# Client Lead Management System (Mini CRM)
+# 🚀 Client Lead CRM - Modern Lead Management SaaS
 
-A production-ready full-stack CRM application for capturing, tracking, and managing business leads. Built with React, Node.js/Express, and Supabase.
+[![React](https://img.shields.io/badge/React-18-blue?style=flat&logo=react)](https://reactjs.org)
+[![Node.js](https://img.shields.io/badge/Node.js-20-green?style=flat&logo=node.js)](https://nodejs.org)
+[![Supabase](https://img.shields.io/badge/Supabase-F7931E?style=flat&logo=supabase)](https://supabase.com)
+[![Vercel](https://img.shields.io/badge/Vercel-000?style=flat&logo=vercel)](https://vercel.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
----
+**Capture, track, and convert leads effortlessly.** Production-ready full-stack CRM with dashboard analytics, notes, and public API. Deploy in minutes!
 
-## 📸 Features
+## ✨ Features at a Glance
+<div align=\"center\">
+  <img src=\"https://via.placeholder.com/800x400/0a2540/ffffff?text=Dashboard+Analytics\" alt=\"Dashboard Screenshot\" width=\"48%\">
+  <img src=\"https://via.placeholder.com/800x400/0a2540/ffffff?text=Leads+Table\" alt=\"Leads Table Screenshot\" width=\"48%\">
+</div>
 
-- 🔐 JWT-based admin authentication
-- 📋 Lead capture via public API endpoint
-- 📊 Analytics dashboard with charts
-- 🔍 Search & filter leads by name, email, company, status, source, date
-- 📝 Per-lead follow-up notes
-- 🔄 Lead status lifecycle (New → Contacted → Converted)
-- 📱 Fully responsive SaaS-style UI
+- 🔐 **Secure JWT Auth** - Admin dashboard login
+- 📊 **Real-time Analytics** - Charts for leads by status/source
+- 📈 **Lead Lifecycle** - New → Contacted → Converted
+- 🔍 **Smart Search/Filter** - Name, email, company, status, source
+- 📝 **Follow-up Notes** - Timestamped per-lead notes
+- 🌐 **Public API** - Capture leads from your website/forms
+- 📱 **Responsive UI** - Mobile-first SaaS design
+- ⚡ **Fast & Scalable** - Vite + Express + Supabase Postgres
 
----
+## 🛠 Tech Stack Badges
+![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Express-415868?style=flat&logo=express&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-F7931E?style=flat&logo=supabase&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000?style=flat&logo=json-web-tokens&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
 
-## 🛠 Tech Stack
+## 🚀 Quick Start (5 Minutes)
 
-| Layer      | Technology              |
-|------------|-------------------------|
-| Frontend   | React 18, React Router, Recharts |
-| Backend    | Node.js, Express.js     |
-| Database   | Supabase (PostgreSQL)   |
-| Auth       | JWT (jsonwebtoken)      |
-| Styling    | CSS Modules + Custom CSS |
+1. **Clone & Install**
+```bash
+git clone <your-repo> crm
+cd crm
+```
 
----
+2. **Supabase Setup** (2 min)
+- Create project at [supabase.com](https://supabase.com)
+- Run `backend/models/schema.sql` in SQL Editor
+- Copy URL + Service Key
 
-## 📁 Folder Structure
+3. **One-Command Run**
+```bash
+# Backend
+cd backend && npm i && npm start &amp;
 
+# Frontend (new terminal)
+cd frontend && npm i && npm run dev
+```
+
+**Backend:** `http://localhost:5000`  
+**Frontend:** `http://localhost:5173`
+
+## 📁 Clean Folder Structure
 ```
 crm/
-├── backend/
-│   ├── config/
-│   │   └── supabase.js          # Supabase client setup
-│   ├── controllers/
-│   │   ├── authController.js    # Login & profile
-│   │   ├── leadsController.js   # Lead CRUD
-│   │   └── notesController.js   # Notes CRUD
-│   ├── middleware/
-│   │   └── auth.js              # JWT verification middleware
-│   ├── models/
-│   │   └── schema.sql           # Supabase SQL schema
-│   ├── routes/
-│   │   ├── auth.js
-│   │   ├── leads.js
-│   │   └── notes.js
-│   ├── .env.example
-│   ├── package.json
-│   └── server.js
-│
-├── /frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Sidebar.jsx
-│   │   │   ├── TopBar.jsx
-│   │   │   ├── LeadTable.jsx
-│   │   │   ├── StatCard.jsx
-│   │   │   ├── NoteItem.jsx
-│   │   │   └── StatusBadge.jsx
-│   │   ├── pages/
-│   │   │   ├── Login.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Leads.jsx
-│   │   │   └── LeadDetail.jsx
-│   │   ├── services/
-│   │   │   └── api.js           # Axios API calls
-│   │   ├── hooks/
-│   │   │   └── useLeads.js
-│   │   ├── context/
-│   │   │   └── AuthContext.jsx
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── .env.example
-│   ├── index.html
-│   └── package.json
-│
+├── backend/     # Express API + Supabase
+├── frontend/    # React + Vite + Tailwind-ish CSS
+├── public/      # Screenshots go here
 └── README.md
 ```
 
----
-
-## ⚙️ Installation & Setup
-
-### 1. Clone the Repository
-
+## 🔌 Test Public Lead API Instantly
 ```bash
-git clone https://github.com/yourusername/client-lead-management-crm.git
-cd client-lead-management-crm
-```
-
-### 2. Set Up Supabase
-
-1. Go to [https://supabase.com](https://supabase.com) and create a new project
-2. Open the **SQL Editor** in your Supabase dashboard
-3. Run the contents of `server/models/schema.sql` to create all tables
-4. Copy your **Project URL** and **anon/service role key** from Project Settings → API
-
-### 3. Configure the Backend
-
-```bash
-cd server
-cp .env.example .env
-```
-
-Edit `backend/.env`:
-```env
-PORT=5000
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_KEY=your-service-role-key
-JWT_SECRET=your-super-secret-jwt-key
-ADMIN_EMAIL=admin@yourcompany.com
-ADMIN_PASSWORD=yourpassword
-```
-
-Install dependencies and start:
-```bash
-npm install
-npm start
-```
-
-The backend will run at `http://localhost:5000`
-
-### 4. Configure the Frontend
-
-```bash
-cd ../client
-cp .env.example .env
-```
-
-Edit `client/.env`:
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-Install dependencies and start:
-```bash
-npm install
-npm run dev
-```
-
-The frontend will run at `http://localhost:5173`
-
----
-
-## 🔌 API Endpoints
-
-### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/login` | Admin login, returns JWT |
-| GET | `/api/auth/profile` | Get current admin profile |
-
-### Leads
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/leads` | Get all leads (with search/filter) |
-| POST | `/api/leads` | Create new lead (public) |
-| GET | `/api/leads/:id` | Get single lead |
-| PATCH | `/api/leads/:id/status` | Update lead status |
-| DELETE | `/api/leads/:id` | Delete a lead |
-
-### Notes
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/leads/:id/notes` | Get notes for a lead |
-| POST | `/api/leads/:id/notes` | Add a note to a lead |
-
----
-
-## 🧪 Testing the Lead Capture API
-
-You can test lead submission with curl:
-
-```bash
-curl -X POST http://localhost:5000/api/leads \
-  -H "Content-Type: application/json" \
+curl -X POST http://localhost:5000/api/leads \\
+  -H "Content-Type: application/json" \\
   -d '{
-    "name": "Jane Doe",
-    "email": "jane@example.com",
-    "phone": "+1234567890",
-    "company": "Acme Corp",
+    "name": "Test Lead",
+    "email": "lead@example.com",
     "source": "website"
   }'
 ```
 
+## ⚙️ Detailed Setup
+
+### Backend (.env)
+```
+PORT=5000
+SUPABASE_URL=your_url
+SUPABASE_SERVICE_KEY=your_key
+JWT_SECRET=supersecret
+ADMIN_EMAIL=admin@company.com
+ADMIN_PASSWORD=admin123
+```
+
+**`cd backend && npm i && npm start`**
+
+### Frontend (.env)
+```
+VITE_API_URL=http://localhost:5000/api
+```
+
+**`cd frontend && npm i && npm run dev`**
+
+**Admin Login:** `admin@company.com` / `admin123` (change in .env!)
+
+## 📊 API Endpoints
+| Endpoint | Method | Auth | Desc |
+|----------|--------|------|------|
+`/api/leads` | GET/POST | admin/public | List/Create leads |
+`/api/leads/:id` | GET/PATCH/DELETE | admin | Single lead ops |
+`/api/leads/:id/notes` | GET/POST | admin | Lead notes |
+`/api/auth/login` | POST | - | JWT token |
+
+## 🎯 Why This CRM?
+- **Lead Magnet:** Public API for website forms
+- **No Vendor Lock:** Self-hosted or Supabase
+- **Analytics Built-in:** No Google Analytics needed
+- **Developer-Friendly:** Clean code, easy extend
+
+## 🚀 Deploy Live
+- **Backend:** Railway/Render → set .env vars
+- **Frontend:** Vercel/Netlify → `npm run build`
+
+## 🤝 Contributing
+1. Fork → Branch → PR
+2. Add features: AI lead scoring? Email integrations?
+3. Issues welcome!
+
+## 📈 Roadmap
+- [x] Core CRM features
+- [x] Analytics dashboard
+- [ ] Email notifications
+- [ ] Calendar integration
+- [ ] Multi-admin support
+
+⭐ **Star if useful!** Questions? Open issue.
+
 ---
+*Built with ❤️ for lead-hungry businesses*
 
-## 🔐 Default Admin Credentials
-
-Set via environment variables in `backend/.env`:
-- **Email**: value of `ADMIN_EMAIL`
-- **Password**: value of `ADMIN_PASSWORD`
-
-> ⚠️ Change these before deploying to production.
-
----
-
-## 📊 Analytics
-
-The dashboard shows:
-- Total Leads
-- New Leads
-- Contacted Leads
-- Converted Leads
-- Leads by source (bar chart)
-- Lead trend over time (line chart)
-
----
-
-## 🚀 Deployment
-
-### Backend (Railway / Render)
-- Set all environment variables in the platform dashboard
-- Point to `backend/server.js` as the entry point
-
-### Frontend (Vercel / Netlify)
-- Set `VITE_API_URL` to your deployed backend URL
-- Build command: `npm run build`
-- Output directory: `dist`
-
----
-
-## 📄 License
-
-MIT — free to use, modify, and distribute.
