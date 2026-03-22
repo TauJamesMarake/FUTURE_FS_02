@@ -4,7 +4,7 @@ import api from '../services/api';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(null);
+  const [admin, setAdmin]     = useState(null);
   const [loading, setLoading] = useState(true);
 
   // On mount, restore session from localStorage

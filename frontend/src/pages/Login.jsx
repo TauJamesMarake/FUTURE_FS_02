@@ -73,12 +73,12 @@ export default function Login() {
             style={{ width: '100%', justifyContent: 'center', padding: '11px 16px', fontSize: 14 }}
             disabled={loading}
           >
-            {loading ? 'Signing in…' : 'Sign In →'}
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
 
-        {/* <p style={{ marginTop: 20, fontSize: 12, color: 'var(--text-muted)', textAlign: 'center' }}>
-          Use the credentials set in your server <code style={{ color: 'var(--accent)' }}>.env</code> file.
+        {/* <p style={{marginTop:20,fontSize:12,color:'var(--text-muted)',textAlign:'center'}}>
+          Use the credentials set in your server <code style={{color:'var(--accent)'}}.env</code> file.
         </p> */}
       </div>
     </div>

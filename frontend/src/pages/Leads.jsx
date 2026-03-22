@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LeadTable from '../components/LeadTable';
-import useLeads from '../hooks/useLeads';
+import LeadTable  from '../components/LeadTable';
+import useLeads   from '../hooks/useLeads';
 
 export default function Leads() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function Leads() {
       {/* ── Filters ── */}
       <div className="filters-row">
         {/* Search */}
-        <div className="search-wrap" style={{ flex: 1, minWidth: 220 }}>
+        <div className="search-wrap" style={{flex:1,minWidth:220}}>
           <span className="search-icon">🔍</span>
           <input
             className="form-control"
@@ -40,7 +40,7 @@ export default function Leads() {
           className="form-control"
           value={filters.status}
           onChange={e => updateFilter('status', e.target.value)}
-          style={{ width: 'auto', minWidth: 140 }}
+          style={{width:'auto',minWidth:140}}
         >
           <option value="">All Statuses</option>
           <option value="new">New</option>
@@ -53,7 +53,7 @@ export default function Leads() {
           className="form-control"
           value={filters.source}
           onChange={e => updateFilter('source', e.target.value)}
-          style={{ width: 'auto', minWidth: 140 }}
+          style={{width:'auto',minWidth:140}}
         >
           <option value="">All Sources</option>
           <option value="website">Website</option>
@@ -65,7 +65,7 @@ export default function Leads() {
 
         {/* Reset */}
         {(filters.search || filters.status || filters.source) && (
-          <button className="btn btn-ghost" onClick={resetFilters} style={{ fontSize: 12 }}>
+          <button className="btn btn-ghost" onClick={resetFilters} style={{fontSize:12}}>
             ✕ Clear
           </button>
         )}
@@ -73,7 +73,7 @@ export default function Leads() {
 
       {/* ── Error ── */}
       {error && (
-        <div className="error-msg" style={{ marginBottom: 16 }}>{error}</div>
+        <div className="error-msg" style={{marginBottom:16}}>{error}</div>
       )}
 
       {/* ── Table ── */}
