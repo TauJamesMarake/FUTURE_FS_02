@@ -30,7 +30,7 @@ export default function Login() {
         <div className="login-logo">
           <div className="logo-icon" style={{ width: 40, height: 40, fontSize: 20 }}>L</div>
           <span className="logo-name" style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 22 }}>
-            Lead<span style={{ color: 'var(--accent)' }}>Flow</span>
+            LEAD<span style={{ color: 'var(--accent)' }}>it</span>
           </span>
         </div>
 
