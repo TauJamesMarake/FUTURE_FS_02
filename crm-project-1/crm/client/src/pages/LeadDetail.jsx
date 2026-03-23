@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
-import NoteItem from '../components/NoteItem';
+import NoteItem    from '../components/NoteItem';
 import { getLead, updateLeadStatus, getNotes, addNote, deleteLead } from '../services/api';
 
 export default function LeadDetail() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id }     = useParams();
+  const navigate   = useNavigate();
 
-  const [lead, setLead] = useState(null);
-  const [notes, setNotes] = useState([]);
-  const [noteText, setNoteText] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [lead,      setLead]      = useState(null);
+  const [notes,     setNotes]     = useState([]);
+  const [noteText,  setNoteText]  = useState('');
+  const [loading,   setLoading]   = useState(true);
+  const [saving,    setSaving]    = useState(false);
+  const [error,     setError]     = useState('');
 
-  // Load lead andd notes on mount
+  // Load lead + notes on mount
   useEffect(() => {
     const load = async () => {
       try {
@@ -24,9 +24,8 @@ export default function LeadDetail() {
           getNotes(id)
         ]);
         setLead(leadRes.data.lead);
-        setNotes(notesRes.data);
+        setNotes(notesRes.data.notes);
       } catch (e) {
-        console.error(e);
         setError('Failed to load lead.');
       } finally {
         setLoading(false);
@@ -72,13 +71,13 @@ export default function LeadDetail() {
 
   const formatDate = (iso) =>
     new Date(iso).toLocaleString('en-US', {
-      month: 'long', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+      month:'long', day:'numeric', year:'numeric',
+      hour:'2-digit', minute:'2-digit'
     });
 
   if (loading) return <div className="loading-spinner">⟳ Loading lead…</div>;
-  if (error) return <div className="error-msg">{error}</div>;
-  if (!lead) return null;
+  if (error)   return <div className="error-msg">{error}</div>;
+  if (!lead)   return null;
 
   return (
     <div>
@@ -91,9 +90,9 @@ export default function LeadDetail() {
       <div className="page-header">
         <div>
           <h2>{lead.name}</h2>
-          <p style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+          <p style={{display:'flex',alignItems:'center',gap:8,marginTop:4}}>
             <StatusBadge status={lead.status} />
-            <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+            <span style={{color:'var(--text-muted)',fontSize:12}}>
               Added {formatDate(lead.created_at)}
             </span>
           </p>
@@ -104,12 +103,12 @@ export default function LeadDetail() {
       </div>
 
       <div className="detail-grid">
-        {/* Left: Info + Notes */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {/* ── Left: Info + Notes ── */}
+        <div style={{display:'flex',flexDirection:'column',gap:20}}>
           {/* Contact Details */}
           <div className="card">
             <div className="card-title">Contact Information</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 24px' }}>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 24px'}}>
               <div className="detail-field">
                 <label>Full Name</label>
                 <span>{lead.name}</span>
@@ -117,16 +116,16 @@ export default function LeadDetail() {
               <div className="detail-field">
                 <label>Email</label>
                 <span>
-                  <a href={`mailto:${lead.email}`} style={{ color: 'var(--accent)' }}>{lead.email}</a>
+                  <a href={`mailto:${lead.email}`} style={{color:'var(--accent)'}}>{lead.email}</a>
                 </span>
               </div>
               <div className="detail-field">
                 <label>Phone</label>
-                <span>{lead.phone || <span style={{ color: 'var(--text-muted)' }}>Not provided</span>}</span>
+                <span>{lead.phone || <span style={{color:'var(--text-muted)'}}>Not provided</span>}</span>
               </div>
               <div className="detail-field">
                 <label>Company</label>
-                <span>{lead.company || <span style={{ color: 'var(--text-muted)' }}>Not provided</span>}</span>
+                <span>{lead.company || <span style={{color:'var(--text-muted)'}}>Not provided</span>}</span>
               </div>
               <div className="detail-field">
                 <label>Source</label>
@@ -138,7 +137,7 @@ export default function LeadDetail() {
                   className="form-control"
                   value={lead.status}
                   onChange={handleStatusChange}
-                  style={{ width: 'auto', display: 'inline-block' }}
+                  style={{width:'auto',display:'inline-block'}}
                 >
                   <option value="new">New</option>
                   <option value="contacted">Contacted</option>
@@ -151,20 +150,20 @@ export default function LeadDetail() {
           {/* Add Note */}
           <div className="card">
             <div className="card-title">Add Follow-Up Note</div>
-            <form onSubmit={handleAddNote} style={{ display: 'flex', gap: 10 }}>
+            <form onSubmit={handleAddNote} style={{display:'flex',gap:10}}>
               <textarea
                 className="form-control"
                 placeholder='e.g. "Called client, waiting for response"'
                 value={noteText}
                 onChange={e => setNoteText(e.target.value)}
                 rows={2}
-                style={{ resize: 'vertical', flex: 1 }}
+                style={{resize:'vertical',flex:1}}
               />
               <button
                 type="submit"
                 className="btn btn-primary"
                 disabled={saving || !noteText.trim()}
-                style={{ alignSelf: 'flex-end', whiteSpace: 'nowrap' }}
+                style={{alignSelf:'flex-end',whiteSpace:'nowrap'}}
               >
                 {saving ? 'Saving…' : '+ Add Note'}
               </button>
@@ -176,73 +175,73 @@ export default function LeadDetail() {
             <div className="card-title">
               Follow-Up History
               <span style={{
-                marginLeft: 8,
-                background: 'var(--bg-elevated)',
-                border: '1px solid var(--border)',
-                borderRadius: 99,
-                padding: '1px 8px',
-                fontSize: 11,
-                color: 'var(--text-muted)',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 400
+                marginLeft:8,
+                background:'var(--bg-elevated)',
+                border:'1px solid var(--border)',
+                borderRadius:99,
+                padding:'1px 8px',
+                fontSize:11,
+                color:'var(--text-muted)',
+                fontFamily:'var(--font-body)',
+                fontWeight:400
               }}>
                 {notes.length}
               </span>
             </div>
             {notes.length === 0 ? (
-              <div style={{ color: 'var(--text-muted)', fontSize: 13, textAlign: 'center', padding: '20px 0' }}>
+              <div style={{color:'var(--text-muted)',fontSize:13,textAlign:'center',padding:'20px 0'}}>
                 No notes yet. Add the first follow-up above.
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{display:'flex',flexDirection:'column',gap:10}}>
                 {notes.map(n => <NoteItem key={n.id} note={n} />)}
               </div>
             )}
           </div>
         </div>
 
-        {/* Right: Quick Info Panel */}
+        {/* ── Right: Quick Info Panel ── */}
         <div>
           <div className="card">
             <div className="card-title">Quick Info</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{display:'flex',flexDirection:'column',gap:16}}>
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>Lead ID</div>
-                <div style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{lead.id}</div>
+                <div style={{fontSize:10.5,fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--text-muted)',marginBottom:4}}>Lead ID</div>
+                <div style={{fontSize:11,fontFamily:'monospace',color:'var(--text-muted)',wordBreak:'break-all'}}>{lead.id}</div>
               </div>
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>Created At</div>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{formatDate(lead.created_at)}</div>
+                <div style={{fontSize:10.5,fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--text-muted)',marginBottom:4}}>Created At</div>
+                <div style={{fontSize:13,color:'var(--text-secondary)'}}>{formatDate(lead.created_at)}</div>
               </div>
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>Pipeline Stage</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  {['new', 'contacted', 'converted'].map(s => (
+                <div style={{fontSize:10.5,fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--text-muted)',marginBottom:6}}>Pipeline Stage</div>
+                <div style={{display:'flex',flexDirection:'column',gap:4}}>
+                  {['new','contacted','converted'].map(s => (
                     <div key={s} style={{
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '6px 10px',
-                      borderRadius: 'var(--radius-md)',
+                      display:'flex', alignItems:'center', gap:8,
+                      padding:'6px 10px',
+                      borderRadius:'var(--radius-md)',
                       background: lead.status === s ? 'var(--accent-glow)' : 'transparent',
                       border: `1px solid ${lead.status === s ? 'var(--accent)' : 'transparent'}`,
                       opacity: lead.status === s ? 1 : 0.4
                     }}>
                       <div style={{
-                        width: 6, height: 6, borderRadius: '50%',
+                        width:6,height:6,borderRadius:'50%',
                         background: s === 'new' ? 'var(--status-new)' : s === 'contacted' ? 'var(--amber)' : 'var(--green)'
                       }} />
-                      <span style={{ fontSize: 12, fontWeight: 500, textTransform: 'capitalize', color: 'var(--text-primary)' }}>
+                      <span style={{fontSize:12,fontWeight:500,textTransform:'capitalize',color:'var(--text-primary)'}}>
                         {s}
                       </span>
                       {lead.status === s && (
-                        <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--accent)' }}>← current</span>
+                        <span style={{marginLeft:'auto',fontSize:10,color:'var(--accent)'}}>← current</span>
                       )}
                     </div>
                   ))}
                 </div>
               </div>
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>Notes</div>
-                <div style={{ fontSize: 22, fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--text-primary)' }}>{notes.length}</div>
+                <div style={{fontSize:10.5,fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',color:'var(--text-muted)',marginBottom:4}}>Notes</div>
+                <div style={{fontSize:22,fontFamily:'var(--font-display)',fontWeight:700,color:'var(--text-primary)'}}>{notes.length}</div>
               </div>
             </div>
           </div>

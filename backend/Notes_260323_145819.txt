@@ -1,0 +1,4 @@
+website portfolio keys
+service key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zenNiaG5vYnFtZnZvZGFxbG1sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Mjk0MzY4NCwiZXhwIjoyMDg4NTE5Njg0fQ.71ohD3G6HU5E_RjMp9wPVU6Ia3vq3e2KFZOg7sGFVY0
+
+jwt key: 881928c8-7acc-4a10-a599-d303d5df4506

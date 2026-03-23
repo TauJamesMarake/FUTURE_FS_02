@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Leads from './pages/Leads';
+import Login      from './pages/Login';
+import Dashboard  from './pages/Dashboard';
+import Leads      from './pages/Leads';
 import LeadDetail from './pages/LeadDetail';
-import Sidebar from './components/Sidebar';
-import TopBar from './components/TopBar';
+import Sidebar    from './components/Sidebar';
+import TopBar     from './components/TopBar';
 
 // Protected layout — renders sidebar + topbar around the page
 const ProtectedLayout = ({ children, title, subtitle }) => {
   const { admin, loading } = useAuth();
 
   if (loading) return <div className="loading-spinner">Loading…</div>;
-  if (!admin) return <Navigate to="/login" replace />;
+  if (!admin)  return <Navigate to="/login" replace />;
 
   return (
     <div className="app-layout">
@@ -38,9 +38,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
+            <PublicRoute><Login /></PublicRoute>
           } />
 
           <Route path="/" element={

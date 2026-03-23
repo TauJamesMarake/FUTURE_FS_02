@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      {/* Stat Cards */}
+      {/* ── Stat Cards ── */}
       <div className="grid-4" style={{marginBottom:24}}>
         <StatCard
           label="Total Leads"
@@ -82,7 +82,7 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Charts */}
+      {/* ── Charts ── */}
       <div className="grid-2" style={{marginBottom:24}}>
         {/* Trend line */}
         <div className="card">

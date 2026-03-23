@@ -14,7 +14,7 @@ export default function Leads() {
 
   return (
     <div>
-      {/* Page Header */}
+      {/* ── Page Header ── */}
       <div className="page-header">
         <div>
           <h2>All Leads</h2>
@@ -22,7 +22,7 @@ export default function Leads() {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* ── Filters ── */}
       <div className="filters-row">
         {/* Search */}
         <div className="search-wrap" style={{flex:1,minWidth:220}}>
@@ -71,12 +71,12 @@ export default function Leads() {
         )}
       </div>
 
-      {/* Error */}
+      {/* ── Error ── */}
       {error && (
         <div className="error-msg" style={{marginBottom:16}}>{error}</div>
       )}
 
-      {/* Table */}
+      {/* ── Table ── */}
       <LeadTable leads={leads} loading={loading} />
     </div>
   );

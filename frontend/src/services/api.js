@@ -25,7 +25,7 @@ api.interceptors.response.use(
   }
 );
 
-// ── Leads ────────────────────────────────────────────────────
+// Leads
 export const getLeads  = (params) => api.get('/leads', { params });
 export const getLead   = (id)     => api.get(`/leads/${id}`);
 export const createLead = (data)  => api.post('/leads', data);
@@ -33,7 +33,7 @@ export const updateLeadStatus = (id, status) => api.patch(`/leads/${id}/status`,
 export const deleteLead = (id)    => api.delete(`/leads/${id}`);
 export const getStats  = ()       => api.get('/leads/analytics/stats');
 
-// ── Notes ────────────────────────────────────────────────────
+// Notes
 export const getNotes = (leadId)            => api.get(`/leads/${leadId}/notes`);
 export const addNote  = (leadId, note_text) => api.post(`/leads/${leadId}/notes`, { note_text });
 
