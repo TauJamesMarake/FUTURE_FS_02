@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Base URL from env (falls back to local proxy)
+// Base URL from env (local proxy)
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: { 'Content-Type': 'application/json' }

@@ -21,7 +21,7 @@ const login = async (req, res) => {
     return res.status(401).json({ message: 'Invalid credentials.' });
   }
 
-  // Direct comparison (plain text env var) — swap for bcrypt hash in production
+  // Direct comparison (plain text env var) - i will swap for bcrypt hash in production
   const isMatch = password === adminPassword;
   if (!isMatch) {
     return res.status(401).json({ message: 'Invalid credentials.' });

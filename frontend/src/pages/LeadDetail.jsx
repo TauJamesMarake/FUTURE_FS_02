@@ -23,7 +23,7 @@ export default function LeadDetail() {
           getLead(id),
           getNotes(id)
         ]);
-        setLead(leadRes.data.lead);
+        setLead(leadRes.data);
         setNotes(notesRes.data);
       } catch (e) {
         console.error(e);
@@ -76,13 +76,13 @@ export default function LeadDetail() {
       hour: '2-digit', minute: '2-digit'
     });
 
-  if (loading) return <div className="loading-spinner">⟳ Loading lead…</div>;
+  if (loading) return <div className="loading-spinner"> Loading lead…</div>;
   if (error) return <div className="error-msg">{error}</div>;
   if (!lead) return null;
 
   return (
     <div>
-      {/* Back */}
+      {/* Back btn */}
       <button className="back-link" onClick={() => navigate('/leads')}>
         ← Back to Leads
       </button>
@@ -99,7 +99,7 @@ export default function LeadDetail() {
           </p>
         </div>
         <button className="btn btn-danger" onClick={handleDelete}>
-          🗑 Delete Lead
+          Delete Lead
         </button>
       </div>
 
