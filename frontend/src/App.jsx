@@ -6,8 +6,9 @@ import Leads from './pages/Leads';
 import LeadDetail from './pages/LeadDetail';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
+import SettingsMenu from './components/SettingsMenu';
 
-// Protected layout — renders sidebar + topbar around the page
+// Protected layout: renders sidebar and topbar around the page
 const ProtectedLayout = ({ children, title, subtitle }) => {
   const { admin, loading } = useAuth();
 
@@ -25,7 +26,7 @@ const ProtectedLayout = ({ children, title, subtitle }) => {
   );
 };
 
-// Redirect logged-in users away from /login
+// Redirect logged in users away from /login
 const PublicRoute = ({ children }) => {
   const { admin, loading } = useAuth();
   if (loading) return null;
@@ -60,6 +61,12 @@ export default function App() {
               <LeadDetail />
             </ProtectedLayout>
           } />
+
+          {/* <Route path='/settingsMenu' element={
+            <ProtectedLayout title="Settings Menu" subtitle="Settings menu for logging out and theme toggle">
+              <SettingsMenu />
+            </ProtectedLayout>
+          } /> */}
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />

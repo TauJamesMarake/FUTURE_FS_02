@@ -66,7 +66,7 @@ export default function Leads() {
         {/* Reset */}
         {(filters.search || filters.status || filters.source) && (
           <button className="btn btn-ghost" onClick={resetFilters} style={{fontSize:12}}>
-            ✕ Clear
+            Clear
           </button>
         )}
       </div>

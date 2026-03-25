@@ -1,4 +1,4 @@
-# 🧭 Client Lead Management System (Mini CRM)
+# 🧭LEADit: Lead Client Lead Management System (Mini CRM)
 
 A production-ready full-stack CRM application for capturing, tracking, and managing business leads. Built with React, Node.js/Express, and Supabase.
 
