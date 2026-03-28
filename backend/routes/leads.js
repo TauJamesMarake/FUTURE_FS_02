@@ -4,23 +4,32 @@ const {
   createLead,
   getLeads,
   getLeadById,
+  updateLead,
   updateLeadStatus,
   deleteLead,
-  getStats
+  restoreLead,
+  exportLeads,
+  getStats,
 } = require('../controllers/leadsController');
 const { protect } = require('../middleware/auth');
 const notesRouter = require('./notes');
 
-// Public: contact form submission
+// Contact form lead submission
 router.post('/', createLead);
 
-// Protected: admin dashboard routes
+// Protected: analytics & export
 router.get('/analytics/stats', protect, getStats);
+router.get('/export', protect, exportLeads); // export ot CSV or PDF
+
+// Protected: CRUD
 router.get('/', protect, getLeads);
 router.get('/:id', protect, getLeadById);
+router.patch('/:id', protect, updateLead);
 router.patch('/:id/status', protect, updateLeadStatus);
+router.patch('/:id/restore', protect, restoreLead);
 router.delete('/:id', protect, deleteLead);
 
-router.use('/:id/notes', notesRouter)
+// Notes
+router.use('/:id/notes', notesRouter);
 
 module.exports = router;

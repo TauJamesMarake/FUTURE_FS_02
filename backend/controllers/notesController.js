@@ -25,12 +25,16 @@ const getNotes = async (req, res) => {
  * @access  Protected
  */
 const addNote = async (req, res) => {
-  const { id }        = req.params;
+  const { id } = req.params;
   const { note_text } = req.body;
-  const created_by    = req.admin?.email || 'admin';
+  const created_by = req.admin?.email || 'admin';
 
   if (!note_text || note_text.trim() === '') {
     return res.status(400).json({ message: 'Note text is required.' });
+  }
+
+  if (note_text.trim().length > 2000) {
+    return res.status(400).json({ message: 'Note must be 2000 characters or fewer.' });
   }
 
   const { data, error } = await supabase
@@ -44,4 +48,34 @@ const addNote = async (req, res) => {
   res.status(201).json({ message: 'Note added.', note: data });
 };
 
-module.exports = { getNotes, addNote };
+/**
+ * @route   DELETE /api/leads/:id/notes/:noteId
+ * @desc    Delete a specific note
+ * @access  Protected
+ */
+const deleteNote = async (req, res) => {
+  const { id, noteId } = req.params;
+
+  // Confirms the note belongs to this lead before deleting
+  const { data: existing, error: fetchError } = await supabase
+    .from('notes')
+    .select('id')
+    .eq('id', noteId)
+    .eq('lead_id', id)
+    .single();
+
+  if (fetchError || !existing) {
+    return res.status(404).json({ message: 'Note not found for this lead.' });
+  }
+
+  const { error } = await supabase
+    .from('notes')
+    .delete()
+    .eq('id', noteId);
+
+  if (error) return res.status(500).json({ message: error.message });
+
+  res.json({ message: 'Note deleted.' });
+};
+
+module.exports = { getNotes, addNote, deleteNote };
