@@ -4,22 +4,31 @@ import {
   FaArrowLeft, FaTrashAlt, FaUserCircle,
   FaEnvelope, FaPhone, FaBuilding, FaGlobe,
   FaTag, FaPlus, FaSpinner, FaStickyNote,
-  FaRegClock
+  FaRegClock, FaTrash
 } from 'react-icons/fa';
 import StatusBadge from '../components/StatusBadge';
 import NoteItem from '../components/NoteItem';
-import { getLead, updateLeadStatus, getNotes, addNote, deleteLead } from '../services/api';
+import DeleteModal from '../components/DeleteModal';
+import { getLead, updateLeadStatus, getNotes, addNote, deleteLead, deleteNote } from '../services/api';
 
 export default function LeadDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [lead, setLead] = useState(null);
-  const [notes, setNotes] = useState([]);
+  const [lead,     setLead]     = useState(null);
+  const [notes,    setNotes]    = useState([]);
   const [noteText, setNoteText] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [loading,  setLoading]  = useState(true);
+  const [saving,   setSaving]   = useState(false);
+  const [error,    setError]    = useState('');
+
+  // Delete lead modal
+  const [deleteModal,  setDeleteModal]  = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Delete note modal
+  const [noteToDelete,  setNoteToDelete]  = useState(null); // note object
+  const [noteDelLoading, setNoteDelLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -65,13 +74,31 @@ export default function LeadDetail() {
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm('Delete this lead? This cannot be undone.')) return;
+  const handleConfirmDelete = async () => {
+    setDeleteLoading(true);
     try {
       await deleteLead(id);
-      navigate('/leads');
+      navigate('/recycle-bin');
     } catch {
       alert('Failed to delete lead.');
+    } finally {
+      setDeleteLoading(false);
+      setDeleteModal(false);
+    }
+  };
+
+  // Delete a single note
+  const handleConfirmDeleteNote = async () => {
+    if (!noteToDelete) return;
+    setNoteDelLoading(true);
+    try {
+      await deleteNote(id, noteToDelete.id);
+      setNotes(prev => prev.filter(n => n.id !== noteToDelete.id));
+    } catch {
+      alert('Failed to delete note.');
+    } finally {
+      setNoteDelLoading(false);
+      setNoteToDelete(null);
     }
   };
 
@@ -82,8 +109,8 @@ export default function LeadDetail() {
     });
 
   if (loading) return <div className="loading-spinner">Loading lead…</div>;
-  if (error) return <div className="error-msg">{error}</div>;
-  if (!lead) return null;
+  if (error)   return <div className="error-msg">{error}</div>;
+  if (!lead)   return null;
 
   return (
     <div>
@@ -91,20 +118,12 @@ export default function LeadDetail() {
       {/* Page Header */}
       <div className="page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-
-          <button className="btn btn-back" onClick={() => navigate('/leads')}>
+          <button className="btn btn-ghost btn-back" onClick={() => navigate('/leads')}>
             <FaArrowLeft style={{ fontSize: 12 }} />
             Back to Leads
           </button>
-
           <div>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 22,
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              margin: 0
-            }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
               {lead.name}
             </h2>
             <p style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
@@ -117,7 +136,7 @@ export default function LeadDetail() {
           </div>
         </div>
 
-        <button className="btn btn-danger" onClick={handleDelete}>
+        <button className="btn btn-danger" onClick={() => setDeleteModal(true)}>
           <FaTrashAlt style={{ fontSize: 12 }} />
           Delete Lead
         </button>
@@ -125,7 +144,7 @@ export default function LeadDetail() {
 
       <div className="detail-grid">
 
-        {/* ── Left Column ── */}
+        {/* Left Column*/}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
           {/* Contact Info Card */}
@@ -144,9 +163,7 @@ export default function LeadDetail() {
               <div className="detail-field">
                 <label><FaEnvelope style={{ marginRight: 4 }} />Email</label>
                 <span>
-                  <a href={`mailto:${lead.email}`} style={{ color: 'var(--accent)' }}>
-                    {lead.email}
-                  </a>
+                  <a href={`mailto:${lead.email}`} style={{ color: 'var(--accent)' }}>{lead.email}</a>
                 </span>
               </div>
 
@@ -178,7 +195,6 @@ export default function LeadDetail() {
                   <option value="converted">Converted</option>
                 </select>
               </div>
-
             </div>
           </div>
 
@@ -203,10 +219,7 @@ export default function LeadDetail() {
                 disabled={saving || !noteText.trim()}
                 style={{ alignSelf: 'flex-end', whiteSpace: 'nowrap' }}
               >
-                {saving
-                  ? <><FaSpinner className="spin" /> Saving…</>
-                  : <><FaPlus /> Add Note</>
-                }
+                {saving ? <><FaSpinner className="spin" /> Saving…</> : <><FaPlus /> Add Note</>}
               </button>
             </form>
           </div>
@@ -217,14 +230,9 @@ export default function LeadDetail() {
               <FaStickyNote style={{ color: 'var(--accent)' }} />
               Follow-Up History
               <span style={{
-                background: 'var(--bg-elevated)',
-                border: '1px solid var(--border)',
-                borderRadius: 99,
-                padding: '1px 8px',
-                fontSize: 11,
-                color: 'var(--text-muted)',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 400
+                background: 'var(--bg-elevated)', border: '1px solid var(--border)',
+                borderRadius: 99, padding: '1px 8px', fontSize: 11,
+                color: 'var(--text-muted)', fontFamily: 'var(--font-body)', fontWeight: 400
               }}>
                 {notes.length}
               </span>
@@ -236,46 +244,41 @@ export default function LeadDetail() {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {notes.map(n => <NoteItem key={n.id} note={n} />)}
+                {notes.map(n => (
+                  <NoteItem
+                    key={n.id}
+                    note={n}
+                    onDelete={() => setNoteToDelete(n)}
+                  />
+                ))}
               </div>
             )}
           </div>
         </div>
 
-        {/* ── Right Column: Quick Info ── */}
+        {/* Right Column */}
         <div>
           <div className="card">
             <div className="card-title">Quick Info</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>
-                  Lead ID
-                </div>
-                <div style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--text-muted)', wordBreak: 'break-all' }}>
-                  {lead.id}
-                </div>
+                <div className="quick-info-label">Lead ID</div>
+                <div style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{lead.id}</div>
               </div>
 
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>
-                  Created At
-                </div>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                  {formatDate(lead.created_at)}
-                </div>
+                <div className="quick-info-label">Created At</div>
+                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{formatDate(lead.created_at)}</div>
               </div>
 
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
-                  Pipeline Stage
-                </div>
+                <div className="quick-info-label" style={{ marginBottom: 6 }}>Pipeline Stage</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {['new', 'contacted', 'converted'].map(s => (
                     <div key={s} style={{
                       display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '6px 10px',
-                      borderRadius: 'var(--radius-md)',
+                      padding: '6px 10px', borderRadius: 'var(--radius-md)',
                       background: lead.status === s ? 'var(--accent-glow)' : 'transparent',
                       border: `1px solid ${lead.status === s ? 'var(--accent)' : 'transparent'}`,
                       opacity: lead.status === s ? 1 : 0.4
@@ -284,21 +287,15 @@ export default function LeadDetail() {
                         width: 6, height: 6, borderRadius: '50%',
                         background: s === 'new' ? 'var(--status-new)' : s === 'contacted' ? 'var(--amber)' : 'var(--green)'
                       }} />
-                      <span style={{ fontSize: 12, fontWeight: 500, textTransform: 'capitalize', color: 'var(--text-primary)' }}>
-                        {s}
-                      </span>
-                      {lead.status === s && (
-                        <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--accent)' }}>← current</span>
-                      )}
+                      <span style={{ fontSize: 12, fontWeight: 500, textTransform: 'capitalize', color: 'var(--text-primary)' }}>{s}</span>
+                      {lead.status === s && <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--accent)' }}>← current</span>}
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 4 }}>
-                  Notes
-                </div>
+                <div className="quick-info-label">Notes</div>
                 <div style={{ fontSize: 22, fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {notes.length}
                 </div>
@@ -309,15 +306,39 @@ export default function LeadDetail() {
         </div>
       </div>
 
+      {/* Delete Lead Modal */}
+      <DeleteModal
+        isOpen={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+        loading={deleteLoading}
+        title="Move lead to trash?"
+        message={
+          <>
+            <strong style={{ color: 'var(--text-primary)' }}>{lead.name}</strong> will be moved to the
+            Recycle Bin. You can restore it from there any time.
+          </>
+        }
+        confirmLabel="Move to Trash"
+        variant="danger"
+      />
+
+      {/* Delete Note Modal */}
+      <DeleteModal
+        isOpen={!!noteToDelete}
+        onClose={() => setNoteToDelete(null)}
+        onConfirm={handleConfirmDeleteNote}
+        loading={noteDelLoading}
+        title="Delete this note?"
+        message="This follow-up note will be permanently removed and cannot be recovered."
+        confirmLabel="Delete Note"
+        variant="danger"
+      />
+
       <style>{`
-        .spin {
-          animation: spin 0.8s linear infinite;
-          display: inline-block;
-        }
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
+        .spin { animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .quick-info-label { font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
       `}</style>
     </div>
   );

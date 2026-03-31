@@ -8,7 +8,6 @@ const required = ['SUPABASE_URL', 'SUPABASE_SERVICE_KEY', 'JWT_SECRET', 'ADMIN_E
 for (const key of required) {
   if (!process.env[key]) {
     console.error(`  Missing ${key} in backend/.env`);
-    console.error('    Copy backend/.env.example → backend/.env and fill in your values.');
     process.exit(1);
   }
 }

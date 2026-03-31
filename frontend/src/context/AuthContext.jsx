@@ -1,10 +1,17 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
 
-const AuthContext = createContext(null);
+// Default value matches the shape of the real value so destructuring
+// never throws even if a component calls useAuth() outside the provider.
+const AuthContext = createContext({
+  admin:   null,
+  loading: true,
+  login:   async () => {},
+  logout:  () => {},
+});
 
 export const AuthProvider = ({ children }) => {
-  const [admin, setAdmin]     = useState(null);
+  const [admin,   setAdmin]   = useState(null);
   const [loading, setLoading] = useState(true);
 
   // On mount, restore session from localStorage
@@ -12,8 +19,14 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('crm_token');
     const saved = localStorage.getItem('crm_admin');
     if (token && saved) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setAdmin(JSON.parse(saved));
+      try {
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        setAdmin(JSON.parse(saved));
+      } catch {
+        // Corrupted storage, clear and start fresh
+        localStorage.removeItem('crm_token');
+        localStorage.removeItem('crm_admin');
+      }
     }
     setLoading(false);
   }, []);
@@ -22,7 +35,6 @@ export const AuthProvider = ({ children }) => {
     const { data } = await api.post('/auth/login', { email, password });
     const { token, admin: adminData } = data;
 
-    // Persist session
     localStorage.setItem('crm_token', token);
     localStorage.setItem('crm_admin', JSON.stringify(adminData));
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -44,4 +56,8 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used inside <AuthProvider>');
+  return ctx;
+};

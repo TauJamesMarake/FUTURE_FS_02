@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
 *,
 *::before,
 *::after {
@@ -40,13 +42,9 @@
   --status-converted: #22c55e;
   --status-converted-bg: rgba(34, 197, 94, 0.12);
 
-  /* Typography */
-  /* --font-display: 'Syne', sans-serif;
-  --font-body:    'DM Sans', sans-serif; */
-
   /* Spacing */
   --sidebar-width: 240px;
-  --topbar-height: 60px;
+  --topbar-height: 69px;
 
   /* Radius */
   --radius-sm: 6px;
@@ -81,11 +79,11 @@
   --radius-md: 10px;
   --radius-lg: 16px;
 
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Outfit', sans-serif;
   --font-body: 'DM Sans', sans-serif;
 }
 
-/* ── Light Theme ── */
+/* Light Theme */
 [data-theme="light"] {
   --bg-base: #f4f6fb;
   --bg-surface: #ffffff;
@@ -138,7 +136,7 @@ textarea {
   outline: none;
 }
 
-/* ── Scrollbar ── */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -1022,7 +1020,7 @@ select.form-control option {
   padding-left: 36px;
 }
 
-/* ── Note items ── */
+/* Note items */
 .note-item {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
@@ -1054,7 +1052,7 @@ select.form-control option {
   line-height: 1.6;
 }
 
-/* ── Cards ── */
+/* Cards */
 .card {
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -1070,7 +1068,7 @@ select.form-control option {
   margin-bottom: 16px;
 }
 
-/* ── Grid helpers ── */
+/* Grid helpers */
 .grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1097,7 +1095,7 @@ select.form-control option {
   }
 }
 
-/* ── Page header ── */
+/* Page header */
 .page-header {
   display: flex;
   align-items: center;
@@ -1118,7 +1116,7 @@ select.form-control option {
   margin-top: 2px;
 }
 
-/* ── Filters row ── */
+/* Filters row */
 .filters-row {
   display: flex;
   gap: 10px;
@@ -1137,75 +1135,285 @@ select.form-control option {
   min-width: 140px;
 }
 
-/* ── Login page ── */
-.login-page {
-  min-height: 100vh;
+/* LOGIN PAGE  (aurora background + glassmorphism card) */
+
+/* Full-viewport dark base, aurora sits on top of this */
+.login-root {
+  position: fixed;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-base);
-  position: relative;
   overflow: hidden;
+  background: #05060f;
 }
 
-.login-page::before {
-  content: '';
+/* Aurora canvas layer */
+.login-aurora {
   position: absolute;
-  top: -200px;
-  right: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(79, 124, 255, 0.08) 0%, transparent 70%);
+  inset: 0;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* Edge vignette so aurora reads as depth not clutter */
+.login-bg-base {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    transparent 0%,
+    rgba(5, 6, 15, 0.55) 60%,
+    rgba(5, 6, 15, 0.85) 100%
+  );
   pointer-events: none;
 }
 
-.login-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 40px;
-  width: 100%;
-  max-width: 420px;
+/* Card wrapper, centres the card, owns the entry animation */
+.login-card-wrap {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  width: 100%;
+  max-width: 400px;
+  padding: 16px;
+  animation: loginFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.login-logo {
+@keyframes loginFadeUp {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* Glass card */
+.login-card {
+  /* Semi-opaque dark base prevents aurora from bleeding into the form */
+  background: rgba(10, 11, 20, 0.72);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 2px 0 0 rgba(255, 255, 255, 0.07) inset,
+    0 32px 80px rgba(0, 0, 0, 0.6),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 40px 36px 36px;
+}
+
+.login-logo-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-}
-
-.login-logo .logo-icon {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-}
-
-.login-logo .logo-name {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.login-logo .logo-name span {
-  color: var(--accent);
-}
-
-.login-box h2 {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.login-box p {
-  color: var(--text-muted);
-  font-size: 13px;
+  gap: 10px;
   margin-bottom: 28px;
 }
 
+/* Reuse global .logo-icon but override size for the login page */
+.login-logo-row .logo-icon {
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+  border-radius: 12px;
+  /* keep accent bg from global .logo-icon */
+}
+
+/* Reuse global .logo-text — colour already correct */
+.login-logo-row .logo-text {
+  font-size: 20px;
+  /* override to stay white/light on the dark card regardless of theme */
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Heading */
+.login-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-heading h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 6px;
+}
+
+.login-heading p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.36);
+  margin: 0;
+}
+
+/* Error banner */
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: 9px;
+  padding: 10px 13px;
+  font-size: 13px;
+  color: #fca5a5;
+  margin-bottom: 20px;
+  animation: loginShake 0.35s ease;
+}
+
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  60%       { transform: translateX(5px); }
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.login-field label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Input wrapper with leading icon */
+.login-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-input-icon {
+  position: absolute;
+  left: 13px;
+  color: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.login-input-wrap input {
+  width: 100%;
+  padding: 11px 14px 11px 38px;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.90) !important;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  /* kill any browser autofill yellow */
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.90);
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Override browser autofill blue/yellow background */
+.login-input-wrap input:-webkit-autofill,
+.login-input-wrap input:-webkit-autofill:hover,
+.login-input-wrap input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(15, 17, 30, 0.95) inset !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.90) !important;
+  caret-color: rgba(255, 255, 255, 0.90);
+}
+
+.login-input-wrap input::placeholder {
+  color: rgba(255, 255, 255, 0.20);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.20);
+}
+
+.login-input-wrap input:focus {
+  border-color: rgba(167, 139, 250, 0.55) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+}
+
+/* Submit button */
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6ee7f7 0%, #a855f7 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.38);
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.login-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(168, 85, 247, 0.50);
+}
+
+.login-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.30);
+}
+
+.login-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.login-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: loginSpin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes loginSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer hint */
+.login-hint {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.20);
+}
+
+.login-hint code {
+  color: rgba(167, 139, 250, 0.60);
+  font-family: 'DM Mono', 'Fira Code', monospace;
+  font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 460px) {
+  .login-card {
+    padding: 32px 22px 28px;
+    border-radius: 16px;
+  }
+}
+
+/* Legacy .form-group / .error-msg (used in other pages) */
 .form-group {
   margin-bottom: 16px;
 }
@@ -1230,7 +1438,7 @@ select.form-control option {
   margin-bottom: 16px;
 }
 
-/* ── Loading / empty states ── */
+/* Loading / empty states */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -1257,7 +1465,7 @@ select.form-control option {
   font-size: 13.5px;
 }
 
-/* ── Back link ── */
+/* Back link */
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -1272,7 +1480,7 @@ select.form-control option {
   color: var(--text-primary);
 }
 
-/* ── Detail grid ── */
+/* Detail grid */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -1305,7 +1513,7 @@ select.form-control option {
   color: var(--text-primary);
 }
 
-/* ── Source chip ── */
+/* Source chip */
 .source-chip {
   display: inline-flex;
   align-items: center;
@@ -1318,7 +1526,7 @@ select.form-control option {
   color: var(--text-secondary);
 }
 
-/* ── Animations ── */
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1333,4 +1541,337 @@ select.form-control option {
 
 .page-content>* {
   animation: fadeIn 0.25s ease both;
+}
+/* DELETE MODAL */
+
+/* Backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 900;
+  animation: backdropIn 0.18s ease;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Dialog box */
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 901;
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.25);
+  padding: 32px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: modalIn 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Coloured icon circle */
+.modal-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+.modal-icon-wrap--danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+}
+
+.modal-icon-wrap--warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.22);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.modal-message {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 320px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.modal-cancel-btn {
+  flex: 1;
+  justify-content: center;
+}
+
+.modal-confirm-btn {
+  flex: 1;
+  justify-content: center;
+  gap: 7px;
+}
+
+.modal-confirm-btn--danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+}
+
+.modal-confirm-btn--danger:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.38);
+}
+
+.modal-confirm-btn--warning {
+  background: #f59e0b;
+  color: #fff;
+  border: none;
+}
+
+.modal-confirm-btn--warning:hover:not(:disabled) {
+  background: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.38);
+}
+
+.modal-confirm-btn:disabled,
+.modal-cancel-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Spinner inside modal button */
+.modal-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: modalSpin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes modalSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* BULK ACTION BAR  (Leads page + Recycle Bin) */
+
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  animation: fadeIn 0.18s ease both;
+}
+
+.bulk-bar-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-right: 4px;
+}
+
+.bulk-bar-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(239, 68, 68, 0.10);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  transition: all 0.15s;
+}
+
+.bulk-bar-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+}
+
+.bulk-bar-restore-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(34, 197, 94, 0.10);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  transition: all 0.15s;
+}
+
+.bulk-bar-restore-btn:hover {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: var(--green);
+}
+
+/* Recycle Bin button in Leads header */
+.recycle-bin-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+/* RECYCLE BIN PAGE */
+
+/* Checkbox styling */
+.rb-checkbox {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Selected row tint */
+.rb-row-selected td {
+  background: var(--accent-glow) !important;
+}
+
+/* Row action buttons */
+.rb-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.rb-restore-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  background: rgba(34, 197, 94, 0.10);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.rb-restore-btn:hover {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: var(--green);
+}
+
+.rb-perm-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  border-radius: var(--radius-md);
+  transition: all 0.15s;
+}
+
+.rb-perm-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+}
+
+/* Empty state */
+.recycle-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.recycle-empty p {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.recycle-empty span {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* EXPORT BUTTONS */
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 12px;
+  white-space: nowrap;
+}
+
+.export-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.export-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: exportSpin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes exportSpin {
+  to { transform: rotate(360deg); }
 }

@@ -3,18 +3,18 @@ const supabase = require('../config/supabase');
 // ─── Validation helpers ────────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VALID_STATUSES = ['new', 'contacted', 'converted'];
-const VALID_SOURCES = ['website', 'referral', 'social', 'email', 'other'];
+const VALID_SOURCES  = ['website', 'referral', 'social', 'email', 'other'];
 
 function validateLeadFields({ name, email, phone, source }) {
   const errors = [];
-  if (!name || name.trim().length < 2) errors.push('Name must be at least 2 characters.');
+  if (!name  || name.trim().length < 2)      errors.push('Name must be at least 2 characters.');
   if (!email || !EMAIL_RE.test(email.trim())) errors.push('A valid email address is required.');
-  if (phone && !/^\+?[\d\s\-().]{7,20}$/.test(phone)) errors.push('Phone number format is invalid.');
+  if (phone  && !/^\+?[\d\s\-().]{7,20}$/.test(phone)) errors.push('Phone number format is invalid.');
   if (source && !VALID_SOURCES.includes(source)) errors.push(`Source must be one of: ${VALID_SOURCES.join(', ')}.`);
   return errors;
 }
 
-// CREATE
+// ─── CREATE ────────────────────────────────────────────────────────────────
 /**
  * @route   POST /api/leads
  * @desc    Capture a new lead (public endpoint for contact forms)
@@ -29,12 +29,12 @@ const createLead = async (req, res) => {
   const { data, error } = await supabase
     .from('leads')
     .insert([{
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      phone: phone?.trim() || null,
+      name:    name.trim(),
+      email:   email.trim().toLowerCase(),
+      phone:   phone?.trim()   || null,
       company: company?.trim() || null,
-      source: source || 'website',
-      status: 'new',
+      source:  source          || 'website',
+      status:  'new',
       deleted_at: null,
     }])
     .select()
@@ -45,7 +45,7 @@ const createLead = async (req, res) => {
   res.status(201).json({ message: 'Lead captured successfully.', lead: data });
 };
 
-// LIST
+// ─── LIST ──────────────────────────────────────────────────────────────────
 /**
  * @route   GET /api/leads
  * @desc    Get all active leads with optional search / filter
@@ -77,7 +77,7 @@ const getLeads = async (req, res) => {
   res.json({ leads: data, total: data.length });
 };
 
-// GET ONE
+// ─── GET ONE ───────────────────────────────────────────────────────────────
 /**
  * @route   GET /api/leads/:id
  * @desc    Get a single active lead by ID
@@ -98,7 +98,7 @@ const getLeadById = async (req, res) => {
   res.json({ lead: data });
 };
 
-// FULL EDIT
+// ─── FULL EDIT ─────────────────────────────────────────────────────────────
 /**
  * @route   PATCH /api/leads/:id
  * @desc    Update any field(s) of a lead
@@ -110,12 +110,12 @@ const updateLead = async (req, res) => {
 
   // Build only the fields that were actually sent
   const patch = {};
-  if (name !== undefined) patch.name = name.trim();
-  if (email !== undefined) patch.email = email.trim().toLowerCase();
-  if (phone !== undefined) patch.phone = phone?.trim() || null;
+  if (name    !== undefined) patch.name    = name.trim();
+  if (email   !== undefined) patch.email   = email.trim().toLowerCase();
+  if (phone   !== undefined) patch.phone   = phone?.trim() || null;
   if (company !== undefined) patch.company = company?.trim() || null;
-  if (source !== undefined) patch.source = source;
-  if (status !== undefined) patch.status = status;
+  if (source  !== undefined) patch.source  = source;
+  if (status  !== undefined) patch.status  = status;
 
   if (!Object.keys(patch).length) {
     return res.status(400).json({ message: 'No fields provided to update.' });
@@ -123,17 +123,17 @@ const updateLead = async (req, res) => {
 
   // Validate whatever was provided
   const errors = validateLeadFields({
-    name: patch.name ?? 'placeholder',   // skip name check if not changing
-    email: patch.email ?? 'a@b.co',        // skip email check if not changing
-    phone: patch.phone,
+    name:   patch.name   ?? 'placeholder',   // skip name check if not changing
+    email:  patch.email  ?? 'a@b.co',        // skip email check if not changing
+    phone:  patch.phone,
     source: patch.source,
   });
 
   // Only surface field-specific errors for fields actually being patched
   const relevant = errors.filter(e => {
-    if (e.includes('Name') && name === undefined) return false;
-    if (e.includes('email') && email === undefined) return false;
-    if (e.includes('Phone') && phone === undefined) return false;
+    if (e.includes('Name')   && name   === undefined) return false;
+    if (e.includes('email')  && email  === undefined) return false;
+    if (e.includes('Phone')  && phone  === undefined) return false;
     if (e.includes('Source') && source === undefined) return false;
     return true;
   });
@@ -152,19 +152,19 @@ const updateLead = async (req, res) => {
     .single();
 
   if (error) return res.status(500).json({ message: error.message });
-  if (!data) return res.status(404).json({ message: 'Lead not found.' });
+  if (!data)  return res.status(404).json({ message: 'Lead not found.' });
 
   res.json({ message: 'Lead updated.', lead: data });
 };
 
-// STATUS ONLY
+// ─── STATUS ONLY ───────────────────────────────────────────────────────────
 /**
  * @route   PATCH /api/leads/:id/status
  * @desc    Update only the status of a lead (kept for backwards compat)
  * @access  Protected
  */
 const updateLeadStatus = async (req, res) => {
-  const { id } = req.params;
+  const { id }     = req.params;
   const { status } = req.body;
 
   if (!VALID_STATUSES.includes(status)) {
@@ -180,12 +180,12 @@ const updateLeadStatus = async (req, res) => {
     .single();
 
   if (error) return res.status(500).json({ message: error.message });
-  if (!data) return res.status(404).json({ message: 'Lead not found.' });
+  if (!data)  return res.status(404).json({ message: 'Lead not found.' });
 
   res.json({ message: 'Status updated.', lead: data });
 };
 
-// SOFT DELETE
+// ─── SOFT DELETE ───────────────────────────────────────────────────────────
 /**
  * @route   DELETE /api/leads/:id
  * @desc    Soft-delete a lead (sets deleted_at timestamp, keeps the row)
@@ -203,7 +203,7 @@ const deleteLead = async (req, res) => {
     .single();
 
   if (error) return res.status(500).json({ message: error.message });
-  if (!data) return res.status(404).json({ message: 'Lead not found or already deleted.' });
+  if (!data)  return res.status(404).json({ message: 'Lead not found or already deleted.' });
 
   res.json({ message: 'Lead moved to trash.' });
 };
@@ -225,12 +225,12 @@ const restoreLead = async (req, res) => {
     .single();
 
   if (error) return res.status(500).json({ message: error.message });
-  if (!data) return res.status(404).json({ message: 'Lead not found in trash.' });
+  if (!data)  return res.status(404).json({ message: 'Lead not found in trash.' });
 
   res.json({ message: 'Lead restored.', lead: data });
 };
 
-// EXPORT
+// ─── EXPORT ────────────────────────────────────────────────────────────────
 /**
  * @route   GET /api/leads/export
  * @desc    Export all active leads as CSV or PDF
@@ -248,10 +248,10 @@ const exportLeads = async (req, res) => {
 
   if (error) return res.status(500).json({ message: error.message });
 
-  // CSV
+  // ── CSV ──────────────────────────────────────────────────────────────────
   if (format === 'csv') {
     const headers = ['ID', 'Name', 'Email', 'Phone', 'Company', 'Source', 'Status', 'Created At'];
-    const escape = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const escape  = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
 
     const rows = data.map(l => [
       escape(l.id),
@@ -271,7 +271,7 @@ const exportLeads = async (req, res) => {
     return res.send(csv);
   }
 
-  // PDF
+  // ── PDF ──────────────────────────────────────────────────────────────────
   if (format === 'pdf') {
     // Build a minimal but clean HTML page — Vercel/Railway will render it via
     // the browser's print-to-PDF; no headless Chrome dependency needed on the
@@ -326,6 +326,35 @@ const exportLeads = async (req, res) => {
   res.status(400).json({ message: 'format must be "csv" or "pdf".' });
 };
 
+/**
+ * @route   DELETE /api/leads/:id/permanent
+ * @desc    Hard-delete a lead and all its notes (only from Recycle Bin)
+ * @access  Protected
+ */
+const permanentDeleteLead = async (req, res) => {
+  const { id } = req.params;
+
+  // Only allow hard-deleting leads that are already soft-deleted
+  const { data: existing, error: fetchError } = await supabase
+    .from('leads')
+    .select('id')
+    .eq('id', id)
+    .not('deleted_at', 'is', null)
+    .single();
+
+  if (fetchError || !existing) {
+    return res.status(404).json({ message: 'Lead not found in trash.' });
+  }
+
+  // Delete notes first (foreign key safety)
+  await supabase.from('notes').delete().eq('lead_id', id);
+
+  const { error } = await supabase.from('leads').delete().eq('id', id);
+  if (error) return res.status(500).json({ message: error.message });
+
+  res.json({ message: 'Lead permanently deleted.' });
+};
+
 function escHtml(v) {
   return String(v ?? '—')
     .replace(/&/g, '&amp;')
@@ -334,7 +363,7 @@ function escHtml(v) {
     .replace(/"/g, '&quot;');
 }
 
-// ANALYTICS
+// ─── ANALYTICS ─────────────────────────────────────────────────────────────
 /**
  * @route   GET /api/leads/analytics/stats
  * @desc    Return aggregate stats for the dashboard (excludes soft-deleted)
@@ -348,8 +377,8 @@ const getStats = async (req, res) => {
 
   if (error) return res.status(500).json({ message: error.message });
 
-  const total = data.length;
-  const newLeads = data.filter(l => l.status === 'new').length;
+  const total     = data.length;
+  const newLeads  = data.filter(l => l.status === 'new').length;
   const contacted = data.filter(l => l.status === 'contacted').length;
   const converted = data.filter(l => l.status === 'converted').length;
 
@@ -378,6 +407,7 @@ module.exports = {
   updateLeadStatus,
   deleteLead,
   restoreLead,
+  permanentDeleteLead,
   exportLeads,
   getStats,
 };

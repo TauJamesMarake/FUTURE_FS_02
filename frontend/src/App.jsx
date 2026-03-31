@@ -7,6 +7,7 @@ import LeadDetail from './pages/LeadDetail';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
 import SettingsMenu from './components/SettingsMenu';
+import RecycleBin from './pages/RecycleBin';
 
 // Protected layout: renders sidebar and topbar around the page
 const ProtectedLayout = ({ children, title, subtitle }) => {
@@ -62,11 +63,11 @@ export default function App() {
             </ProtectedLayout>
           } />
 
-          {/* <Route path='/settingsMenu' element={
-            <ProtectedLayout title="Settings Menu" subtitle="Settings menu for logging out and theme toggle">
-              <SettingsMenu />
+          <Route path="/recycle-bin" element={
+            <ProtectedLayout title="Recycle Bin" subtitle="List of deleted leads.">
+              <RecycleBin />
             </ProtectedLayout>
-          } /> */}
+          } />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
