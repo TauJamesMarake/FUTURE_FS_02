@@ -13,6 +13,7 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [admin,   setAdmin]   = useState(null);
   const [loading, setLoading] = useState(true);
+  const isGuest = admin?.role === 'guest';
 
   // On mount, restore session from localStorage
   useEffect(() => {
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ admin, login, logout, loading }}>
+    <AuthContext.Provider value={{ admin, login, logout, loading, isGuest }}>
       {children}
     </AuthContext.Provider>
   );

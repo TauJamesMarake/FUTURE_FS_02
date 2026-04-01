@@ -16,20 +16,32 @@ const login = async (req, res) => {
   // Compare against environment-configured admin credentials
   const adminEmail    = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
+  const guestEmail    = process.env.GUEST_EMAIL;
+  const guestPassword = process.env.GUEST_PASSWORD;
 
-  if (email !== adminEmail) {
-    return res.status(401).json({ message: 'Invalid credentials.' });
-  }
+let role = null;
 
-  // Direct comparison (plain text env var) - i will swap for bcrypt hash in production
-  const isMatch = password === adminPassword;
-  if (!isMatch) {
-    return res.status(401).json({ message: 'Invalid credentials.' });
-  }
+  // if (email !== adminEmail) {
+  //   return res.status(401).json({ message: 'Invalid credentials.' });
+  // }
+
+  // Direct comparison (plain text env var)
+  // const isMatch = password === adminPassword;
+  // if (!isMatch) {
+  //   return res.status(401).json({ message: 'Invalid credentials.' });
+  // }
+
+  if (email === adminEmail && password === adminPassword) {
+  role = 'admin';
+} else if (email === guestEmail && password === guestPassword) {
+  role = 'guest';
+} else {
+  return res.status(401).json({ message: 'Invalid credentials.' });
+}
 
   // Sign JWT valid for 24 hours
   const token = jwt.sign(
-    { email: adminEmail, role: 'admin' },
+    { email, role },
     process.env.JWT_SECRET,
     { expiresIn: '24h' }
   );
@@ -37,7 +49,7 @@ const login = async (req, res) => {
   res.json({
     message: 'Login successful.',
     token,
-    admin: { email: adminEmail, role: 'admin' }
+    admin: { email, role }
   });
 };
 

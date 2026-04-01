@@ -10,24 +10,26 @@ import StatusBadge from '../components/StatusBadge';
 import NoteItem from '../components/NoteItem';
 import DeleteModal from '../components/DeleteModal';
 import { getLead, updateLeadStatus, getNotes, addNote, deleteLead, deleteNote } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function LeadDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isGuest } = useAuth();
 
-  const [lead,     setLead]     = useState(null);
-  const [notes,    setNotes]    = useState([]);
+  const [lead, setLead] = useState(null);
+  const [notes, setNotes] = useState([]);
   const [noteText, setNoteText] = useState('');
-  const [loading,  setLoading]  = useState(true);
-  const [saving,   setSaving]   = useState(false);
-  const [error,    setError]    = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   // Delete lead modal
-  const [deleteModal,  setDeleteModal]  = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Delete note modal
-  const [noteToDelete,  setNoteToDelete]  = useState(null); // note object
+  const [noteToDelete, setNoteToDelete] = useState(null); // note object
   const [noteDelLoading, setNoteDelLoading] = useState(false);
 
   useEffect(() => {
@@ -109,8 +111,8 @@ export default function LeadDetail() {
     });
 
   if (loading) return <div className="loading-spinner">Loading lead…</div>;
-  if (error)   return <div className="error-msg">{error}</div>;
-  if (!lead)   return null;
+  if (error) return <div className="error-msg">{error}</div>;
+  if (!lead) return null;
 
   return (
     <div>
@@ -136,10 +138,12 @@ export default function LeadDetail() {
           </div>
         </div>
 
-        <button className="btn btn-danger" onClick={() => setDeleteModal(true)}>
-          <FaTrashAlt style={{ fontSize: 12 }} />
-          Delete Lead
-        </button>
+        {!isGuest && (
+          <button className="btn btn-danger" onClick={() => setDeleteModal(true)}>
+            <FaTrashAlt style={{ fontSize: 12 }} />
+            Delete Lead
+          </button>
+        )}
       </div>
 
       <div className="detail-grid">
@@ -184,7 +188,7 @@ export default function LeadDetail() {
 
               <div className="detail-field">
                 <label><FaTag style={{ marginRight: 4 }} />Status</label>
-                <select
+                {/* <select
                   className="form-control"
                   value={lead.status}
                   onChange={handleStatusChange}
@@ -193,36 +197,52 @@ export default function LeadDetail() {
                   <option value="new">New</option>
                   <option value="contacted">Contacted</option>
                   <option value="converted">Converted</option>
-                </select>
+                </select> */}
+                {isGuest ? (
+                  <span className="source-chip">{lead.status}</span>
+                ) : (
+                  <select
+                    className="form-control"
+                    value={lead.status}
+                    onChange={handleStatusChange}
+                    style={{ width: 'auto', display: 'inline-block' }}
+                  >
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="converted">Converted</option>
+                  </select>
+                )}
               </div>
             </div>
           </div>
 
           {/* Add Note Card */}
-          <div className="card">
-            <div className="card-title">
-              <FaPlus style={{ marginRight: 7, color: 'var(--accent)', verticalAlign: 'middle' }} />
-              Add Follow-Up Note
+          {!isGuest && (
+            <div className="card">
+              <div className="card-title">
+                <FaPlus style={{ marginRight: 7, color: 'var(--accent)', verticalAlign: 'middle' }} />
+                Add Follow-Up Note
+              </div>
+              <form onSubmit={handleAddNote} style={{ display: 'flex', gap: 10 }}>
+                <textarea
+                  className="form-control"
+                  placeholder='e.g. "Called client, waiting for response"'
+                  value={noteText}
+                  onChange={e => setNoteText(e.target.value)}
+                  rows={2}
+                  style={{ resize: 'vertical', flex: 1 }}
+                />
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={saving || !noteText.trim()}
+                  style={{ alignSelf: 'flex-end', whiteSpace: 'nowrap' }}
+                >
+                  {saving ? <><FaSpinner className="spin" /> Saving…</> : <><FaPlus /> Add Note</>}
+                </button>
+              </form>
             </div>
-            <form onSubmit={handleAddNote} style={{ display: 'flex', gap: 10 }}>
-              <textarea
-                className="form-control"
-                placeholder='e.g. "Called client, waiting for response"'
-                value={noteText}
-                onChange={e => setNoteText(e.target.value)}
-                rows={2}
-                style={{ resize: 'vertical', flex: 1 }}
-              />
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={saving || !noteText.trim()}
-                style={{ alignSelf: 'flex-end', whiteSpace: 'nowrap' }}
-              >
-                {saving ? <><FaSpinner className="spin" /> Saving…</> : <><FaPlus /> Add Note</>}
-              </button>
-            </form>
-          </div>
+          )}
 
           {/* Notes List */}
           <div className="card">
