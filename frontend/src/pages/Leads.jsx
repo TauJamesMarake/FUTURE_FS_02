@@ -217,9 +217,6 @@ export default function Leads() {
         )}
       </div>
 
-      {/* Error */}
-      {/* {error && <div className="error-msg" style={{ marginBottom: 16 }}>{error}</div>} */}
-
       {/* Table with checkboxes */}
       <LeadTable
         leads={leads}

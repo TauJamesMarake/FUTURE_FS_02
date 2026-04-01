@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
     FaUser, FaEnvelope, FaPhone, FaBuilding,
-    FaGlobe, FaCheckCircle, FaExclamationCircle,
-    FaArrowRight, FaSpinner, FaTimes
+    FaGlobe, FaCheckCircle, FaExclamationCircle, FaSpinner, FaTimes
 } from 'react-icons/fa';
 import { createLead } from '../services/api';
 
@@ -74,7 +73,7 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
                     <div className="modal-success">
                         <div className="success-icon"><FaCheckCircle /></div>
                         <h2>You're on the list!</h2>
-                        <p>Thanks for your interest. We'll be in touch with you shortly.</p>
+                        <p>Thanks for your interest. We'll be in touch.</p>
                         <button className="btn btn-primary" onClick={handleClose}>
                             Done
                         </button>
@@ -188,7 +187,7 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
                             >
                                 {status === 'loading'
                                     ? <><FaSpinner className="spin" /> Submitting…</>
-                                    : <>I'm Interested <FaArrowRight /></>
+                                    : <>I'm Interested</>
                                 }
                             </button>
 

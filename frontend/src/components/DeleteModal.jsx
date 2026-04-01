@@ -1,16 +1,4 @@
-/**
- * DeleteModal — reusable confirmation modal.
- *
- * Props:
- *   isOpen      boolean
- *   onClose     () => void
- *   onConfirm   () => void  (called when the destructive button is clicked)
- *   loading     boolean
- *   title       string
- *   message     string | ReactNode
- *   confirmLabel string   (default "Delete")
- *   variant      "danger" | "warning"  (default "danger")
- */
+
 export default function DeleteModal({
   isOpen,
   onClose,

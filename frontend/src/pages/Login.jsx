@@ -56,7 +56,7 @@ export default function Login() {
 
           <div className="login-logo-row">
             <div className="logo-icon" style={{ width: 36, height: 36, fontSize: 18, borderRadius: 9 }}>
-              L
+              Li
             </div>
             <span className="logo-text" style={{ fontSize: 20 }}>
               LEAD<span>it</span>
@@ -138,10 +138,6 @@ export default function Login() {
               ) : (
                 <>
                   Sign In
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
                 </>
               )}
             </button>

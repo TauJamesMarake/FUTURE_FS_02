@@ -126,7 +126,7 @@ export default function Dashboard() {
       {/* Charts */}
       <div className="grid-2" style={{ marginBottom: 24 }}>
         <div className="card">
-          <div className="card-title">Leads — Last 7 Days</div>
+          <div className="card-title">Leads - Last 7 Days</div>
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={stats?.trend || []} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
               <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />

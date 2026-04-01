@@ -15,7 +15,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="logo-mark">
-          <div className="logo-icon">L</div>
+          <div className="logo-icon">Li</div>
           <span className="logo-text">LEAD<span>it</span></span>
         </div>
       </div>
