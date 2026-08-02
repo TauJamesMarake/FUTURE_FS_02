@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import SoftAurora from '../components/SoftAurora/SoftAurora';
+import logoIcon from '../images/leadit-icon_bw.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -56,7 +57,7 @@ export default function Login() {
 
           <div className="login-logo-row">
             <div className="logo-icon" style={{ width: 36, height: 36, fontSize: 18, borderRadius: 9 }}>
-              Li
+              <img src={logoIcon} alt="LEADit logo" draggable="false" />
             </div>
             <span className="logo-text" style={{ fontSize: 20 }}>
               LEAD<span>it</span>

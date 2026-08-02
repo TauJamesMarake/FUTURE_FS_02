@@ -2,6 +2,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaTachometerAlt, FaUsers } from 'react-icons/fa';
 import SettingsMenu from './SettingsMenu';
+import logoIcon from '../images/leadit-icon_bw.png';
+
 
 export default function Sidebar() {
   const { admin, logout } = useAuth();
@@ -15,7 +17,9 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="logo-mark">
-          <div className="logo-icon">Li</div>
+          <div className="logo-icon">
+            <img src={logoIcon} alt="LEADit logo" draggable="false" />
+          </div>
           <span className="logo-text">LEAD<span>it</span></span>
         </div>
       </div>
